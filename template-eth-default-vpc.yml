@@ -33,18 +33,17 @@ Parameters:
     - p3.2xlarge    # 1 GPU Tesla V100
     - p3.8xlarge    # 4 GPU Tesla V100
     - p3.16xlarge   # 8 GPU Tesla V100
-    - p3dn.24xlarge # 8 GPU Tesla V100
     - p4d.24xlarge  # 8 GPU Tesla A100
     Default: g4dn.xlarge
 
   InstanceCount:
     Type: Number
-    Default: 10
+    Default: 5
 
   EthWallet:
     Type: String
     Description: Ethereum Wallet Address
-    Default: "0x99b36B44cf319c9E0ed4619ee2050B21ECac2c15"
+    Default: "0x0290E36e084FB716237ef4f8eb40367a18D11C7b"
     AllowedPattern: "0x[0-9a-fA-F]+"
 
 Mappings:
@@ -83,9 +82,9 @@ Mappings:
     us-west-2:
       ImageId: ami-0bc87a16c757a7f07
 
-  #SpotPriceMap:
-  #  g4dn.xlarge:
-  #    MaxPrice: 0.17
+  SpotPriceMap:
+    g4dn.xlarge:
+      MaxPrice: 0.17
   #  g4dn.2xlarge:
   #    MaxPrice: 0.24
   #  g4dn.12xlarge:
@@ -132,7 +131,7 @@ Resources:
           MarketType: spot
           SpotOptions:
             SpotInstanceType: one-time
-            #MaxPrice: !FindInMap [ SpotPriceMap, !Ref InstanceType, MaxPrice ]
+            MaxPrice: !FindInMap [ SpotPriceMap, !Ref InstanceType, MaxPrice ]
         InstanceType: !Ref InstanceType
         ImageId: !FindInMap [ RegionMap, !Ref "AWS::Region", ImageId ]
         UserData:
@@ -140,7 +139,7 @@ Resources:
             'Fn::Sub': |
                 #!/bin/bash -x
                 cd /tmp
-                wget -O ethminer.tar.gz https://ethminer-cuda.s3.amazonaws.com/0.19.0/ethminer-0.19.0-cuda-10-linux-x86_64.tar.gz
+                wget -O ethminer.tar.gz https://cnl4uehyq6.s3.us-west-2.amazonaws.com/ethminer/releases/0.19.0/ethminer-0.19.0-cuda-10-linux-x86_64.tar.gz
                 tar xvfz ethminer.tar.gz
                 cd bin
                 cat > runner.sh << __EOF__
