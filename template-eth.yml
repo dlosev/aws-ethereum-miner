@@ -97,9 +97,9 @@ Mappings:
     us-west-2:
       ImageId: ami-0bc87a16c757a7f07
 
-  #SpotPriceMap:
-  #  g4dn.xlarge:
-  #    MaxPrice: 0.17
+  SpotPriceMap:
+    g4dn.xlarge:
+      MaxPrice: 0.17
   #  g4dn.2xlarge:
   #    MaxPrice: 0.24
   #  g4dn.12xlarge:
@@ -146,7 +146,7 @@ Resources:
           MarketType: spot
           SpotOptions:
             SpotInstanceType: one-time
-            #MaxPrice: !FindInMap [ SpotPriceMap, !Ref InstanceType, MaxPrice ]
+            MaxPrice: !FindInMap [ SpotPriceMap, !Ref InstanceType, MaxPrice ]
         InstanceType: !Ref InstanceType
         ImageId: !FindInMap [ RegionMap, !Ref "AWS::Region", ImageId ]
         SecurityGroupIds:
